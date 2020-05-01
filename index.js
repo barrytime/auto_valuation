@@ -1,5 +1,15 @@
-const { loadData, calcExpectedGrowth } = require('./utils');
+const {
+    loadData,
+    parseFundamentals,
+    time,
+    formulas,
+    valuation,
+} = require('./utils');
 
-const res = JSON.parse(loadData('./data/testResponse.json'));
+const resFundamentals = JSON.parse(loadData('./data/testResponse.json'));
+const resPrice = JSON.parse(loadData('./data/priceResponse.json'));
 
-const growth = calcExpectedGrowth(res);
+const fundamentals = parseFundamentals(resFundamentals);
+const growth = formulas.expectedGrowth(fundamentals);
+
+console.log(valuation.historicPE(resPrice, fundamentals));

@@ -1,45 +1,6 @@
 const { compareArrays } = require('./utils');
 const formulas = require('./formulas');
 
-const cleanResponse = response => {
-    const columns = {};
-    const colsToInvert = [
-        'annualCurrentDebt',
-        'annualLongTermDebt',
-        'annualCurrentLiabilities',
-        'annualTotalNonCurrentLiabilitiesNetMinorityInterest',
-    ];
-    // clean data into columns array
-    response.forEach(col => {
-        const type = col.meta.type[0];
-        const data = col[type];
-        const dateArray = [];
-        const valueArray = [];
-
-        data.forEach(d => {
-            if (d === null) return;
-            valueArray.push(d.reportedValue.raw);
-            dateArray.push(d.asOfDate);
-        });
-
-        if (valueArray.length > 0) {
-            // find average % change
-            const average = formulas.average(valueArray);
-            let avgChange = formulas.avgPctChange(valueArray);
-            if (colsToInvert.includes(type)) avgChange = -avgChange;
-
-            columns[type] = {
-                dates: dateArray,
-                values: valueArray,
-                average,
-                avgChange,
-            };
-        }
-    });
-
-    return columns;
-};
-
 // Book Value
 const getBookValue = dataObj => {
     try {
@@ -212,15 +173,48 @@ const getROIC = dataObj => {
     }
 };
 
-const calcExpectedGrowth = res => {
-    const data = cleanResponse(res);
+const parseFundamentals = response => {
+    const columns = {};
+    const colsToInvert = [
+        'annualCurrentDebt',
+        'annualLongTermDebt',
+        'annualCurrentLiabilities',
+        'annualTotalNonCurrentLiabilitiesNetMinorityInterest',
+    ];
+    // clean data into columns array
+    response.forEach(col => {
+        const type = col.meta.type[0];
+        const data = col[type];
+        const dateArray = [];
+        const valueArray = [];
 
-    data.bookValue = getBookValue(data);
-    data.currentRatio = getCurrentRatio(data);
-    data.debtEquity = getDebtEquity(data);
-    data.ROIC = getROIC(data);
+        data.forEach(d => {
+            if (d === null) return;
+            valueArray.push(d.reportedValue.raw);
+            dateArray.push(d.asOfDate);
+        });
 
-    return formulas.expectedGrowth(data);
+        if (valueArray.length > 0) {
+            // find average % change
+            const average = formulas.average(valueArray);
+            let avgChange = formulas.avgPctChange(valueArray);
+            if (colsToInvert.includes(type)) avgChange = -avgChange;
+
+            columns[type] = {
+                dates: dateArray,
+                values: valueArray,
+                average,
+                avgChange,
+            };
+        }
+    });
+
+    columns.bookValue = getBookValue(columns);
+    columns.currentRatio = getCurrentRatio(columns);
+    columns.debtEquity = getDebtEquity(columns);
+    columns.ROIC = getROIC(columns);
+
+    return columns;
 };
 
-module.exports = calcExpectedGrowth;
+module.exports = parseFundamentals;

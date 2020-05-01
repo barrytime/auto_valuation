@@ -1,6 +1,6 @@
-const average = array => {
+const average = (array, places = 4) => {
     return parseFloat(
-        (array.reduce((sum, x) => sum + x) / array.length).toFixed(4)
+        (array.reduce((sum, x) => sum + x) / array.length).toFixed(places)
     );
 };
 
@@ -78,6 +78,9 @@ const expectedGrowth = data => {
     return (growth + growth * loss).toFixed(4);
 };
 
+const highest = arr => arr.sort((a, b) => b - a)[0];
+const lowest = arr => arr.sort((a, b) => a - b)[0];
+
 module.exports = {
     average,
     avgPctChange,
@@ -86,4 +89,6 @@ module.exports = {
     debtEquity,
     roic,
     expectedGrowth,
+    highest,
+    lowest,
 };
