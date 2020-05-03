@@ -1,6 +1,22 @@
 const formulas = require('./formulas');
 const time = require('./time');
 
+const futurePrice = (eps, growth, timeFrame, futurePE) =>
+    (
+        parseFloat(eps) *
+        Math.pow(1 + parseFloat(growth), parseFloat(timeFrame)) *
+        parseFloat(futurePE)
+    ).toFixed(2);
+
+const fairValue = (futurePrice, ror, timeFrame) =>
+    (
+        parseFloat(futurePrice) /
+        parseFloat(Math.pow(1 + parseFloat(ror), timeFrame))
+    ).toFixed(2);
+
+const buyPrice = (fairValue, marginOfSafety) =>
+    (parseFloat(fairValue) * parseFloat(marginOfSafety)).toFixed(2);
+
 const historicPE = (priceRes, fundamentals) => {
     const epsTS = fundamentals['annualBasicEPS'].dates.reduce((arr, date) => {
         arr.push(time.getUTS(date));
@@ -39,4 +55,7 @@ const historicPE = (priceRes, fundamentals) => {
 
 module.exports = {
     historicPE,
+    futurePrice,
+    fairValue,
+    buyPrice,
 };

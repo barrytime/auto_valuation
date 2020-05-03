@@ -5,6 +5,7 @@ const getFundamentals = async ticker => {
     const columns = [
         'annualTotalRevenue', //revenue
         'annualBasicEPS', //eps
+        'quarterlyBasicEPS',
         'annualStockholdersEquity', //equity
         'annualFreeCashFlow', //free cash flow
         'quarterlyFreeCashFlow', //fcf quarterly
@@ -48,4 +49,12 @@ const getHistoricalPrices = async (ticker, interval, years) => {
     return res.data.chart.result;
 };
 
-module.exports = { getFundamentals, getHistoricalPrices };
+const getRecentPrices = async ticker => {
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?region=CA&lang=en-CA&includePrePost=false&interval=1m&range=1d`;
+
+    const res = await axios.get(url);
+
+    return res.data.chart.result;
+};
+
+module.exports = { getFundamentals, getHistoricalPrices, getRecentPrices };

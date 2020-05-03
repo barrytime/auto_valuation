@@ -7,4 +7,10 @@ const saveHistoricalPrices = ticker => {
     );
 };
 
-saveHistoricalPrices('MSFT');
+const saveFundamentals = ticker => {
+    getFundamentals('MSFT').then(res =>
+        storeData(res, './data/testResponse.json')
+    );
+};
+
+saveFundamentals('MSFT');

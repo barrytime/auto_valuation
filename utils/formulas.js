@@ -25,6 +25,8 @@ const avgPctChange = array => {
     }
 };
 
+const sumArray = arr => parseFloat(arr.reduce((a, b) => a + b)).toFixed(2);
+
 const bookValue = (equity, shares) => parseFloat((equity / shares).toFixed(4));
 
 const currentRatio = (curAssets, curLiabilities) =>
@@ -50,6 +52,7 @@ const expectedGrowth = data => {
         'annualCurrentAssets',
         'annualTotalRevenue',
         'annualBasicEPS',
+        'quarterlyBasicEPS',
         'bookValue',
         'ROIC',
     ];
@@ -91,4 +94,5 @@ module.exports = {
     expectedGrowth,
     highest,
     lowest,
+    sumArray,
 };
