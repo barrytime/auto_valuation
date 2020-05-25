@@ -4,7 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "report": "node ./index"
+        "report": "node ./index",
+        "saveData": "node ./save_data"
     },
     "author": "",
     "license": "ISC",

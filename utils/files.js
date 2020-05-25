@@ -1,7 +1,12 @@
 const fs = require('fs');
 
-const storeData = (data, path) => {
+const storeData = async (data, path) => {
     try {
+        const dirPath = path
+            .split('/')
+            .slice(0, -1)
+            .join('/');
+        await fs.promises.mkdir(dirPath, { recursive: true });
         fs.writeFileSync(path, JSON.stringify(data));
     } catch (err) {
         console.error(err);

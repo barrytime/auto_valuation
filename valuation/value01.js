@@ -2,14 +2,8 @@ var colors = require('colors/safe');
 
 const { parseFundamentals, formulas, valuation } = require('../utils');
 
-const yahoo = require('../api/yahoo');
-
-const fullReport = async ticker => {
+const fullReport = (ticker, resFundamentals, resPrice, resCurrent) => {
     try {
-        const resFundamentals = await yahoo.getFundamentals(ticker);
-        const resPrice = await yahoo.getHistoricalPrices(ticker, 'mo', 6);
-        const resCurrent = await yahoo.getRecentPrices(ticker);
-
         const currentPrice = resCurrent[0].meta.regularMarketPrice;
 
         const fundamentals = parseFundamentals(resFundamentals);
